@@ -14,7 +14,7 @@ Background
 ---
 This project is based on tensorflow 1.0, and python 2.7.
 
-I spent quite a few days trying to improve the accuracy of this model, some cannot work, and some can. I have achieved 4.9% error rate on sequencial digits recognition. As a beginner of machine learning, it's quite good for me. But there are still quite a lot modern net structure I haven't use, so I believe it should be able to achieve even higher accuracy.
+I spent quite a few days trying to improve the accuracy of this model, some cannot work, and some can. I have achieved 4.8% error rate on sequencial digits recognition. As a beginner of machine learning, it's quite good for me. But there are still quite a lot modern net structure I haven't use, so I believe it should be able to achieve even higher accuracy.
 
 </br>
 
@@ -65,7 +65,7 @@ Accuracy
 |extra + 7 conv + 2 fc + increase number of params + bacth normalization | 94.5% | </br>
 |extra + 7 conv + 2 fc + increase number of params + bacth normalization | 94.5% | </br>
 |extra + 7 conv + 2 fc + increase number of params + bacth normalization + clear some comments(???) | 95.1% | </br>
-
+|extra + 7 conv + 2 fc + increase number of params + bacth normalization + max-avg pooling | 95.2% | </br>
 
 
 
