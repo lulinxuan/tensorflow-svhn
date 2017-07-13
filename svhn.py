@@ -47,7 +47,7 @@ NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = svhn_input.NUM_EXAMPLES_PER_EPOCH_FOR_EVAL
 
 
 # Constants describing the training process.
-MOVING_AVERAGE_DECAY = 0.9999     # The decay to use for the moving average.
+MOVING_AVERAGE_DECAY = 0.999     # The decay to use for the moving average.
 NUM_EPOCHS_PER_DECAY = 350.0      # Epochs after which learning rate decays.
 LEARNING_RATE_DECAY_FACTOR = 0.1  # Learning rate decay factor.
 INITIAL_LEARNING_RATE = 0.1       # Initial learning rate.
@@ -99,6 +99,17 @@ def conv2d(name, l_input, w, b, k,is_training, padding = 'SAME'):
 def max_pool(name, l_input, k, h=2):
   return tf.nn.max_pool(l_input, ksize=[1, k, k, 1], strides=[1, h, h, 1], padding='SAME', name=name)
 
+def max_avg_pool(name, l_input, k, h=2):
+  max_pool = tf.nn.max_pool(l_input, ksize=[1, k, k, 1], strides=[1, h, h, 1], padding='SAME')
+  avg_pool = tf.nn.avg_pool(l_input, ksize=[1, k, k, 1], strides=[1, h, h, 1], padding='SAME')
+  with tf.variable_scope(name):
+    # pool_weight_max = tf.Variable(0.7, name='max_pool_factor')
+    # pool_weight_avg = tf.Variable(0.3, name='avg_pool_factor')
+
+    out = max_pool*0.71 + avg_pool*0.29
+
+  return out
+
 def bn(x, is_training):
   with tf.variable_scope('bn') as scope:
     bn_train = batch_norm(x, decay=0.99, center=True, scale=True, updates_collections=None, is_training=True, reuse=None, trainable=True, scope = scope)
@@ -112,12 +123,12 @@ def net_1(_X, _dropout):
   with tf.variable_scope('conv1') as scope:
     conv1 = conv2d('conv1', _X, weight_variable('weights', shape=[3,3,3,96], wd=0.004)
                                 , bias_variable('biases', [96], 0.0), 1, is_training, padding = 'VALID')
-    pool1 = max_pool('pool1', conv1, k=2)
+    pool1 = max_avg_pool('pool1', conv1, k=2)
 
   with tf.variable_scope('conv2') as scope:
     conv2 = conv2d('conv2', pool1, weight_variable('weights', shape=[3,3,96,128], wd=0.004)
                                 , bias_variable('biases', [128], 0.0),1, is_training, padding = 'VALID')
-    pool2 = max_pool('pool2', conv2, k=2)
+    pool2 = max_avg_pool('pool2', conv2, k=2)
 
   with tf.variable_scope('conv3') as scope:
     conv3 = conv2d('conv3', pool2, weight_variable('weights', shape=[3,3,128,160], wd=0.004)                                
@@ -126,7 +137,7 @@ def net_1(_X, _dropout):
   with tf.variable_scope('conv4') as scope:
     conv4 = conv2d('conv4', conv3, weight_variable('weights', shape=[3,3,160,196], wd=0.004)                                
                                 , bias_variable('biases', [196], 0.0),1, is_training, padding = 'VALID')
-    pool4 = max_pool('pool4', conv4, k=2)
+    pool4 = max_avg_pool('pool4', conv4, k=2)
   
 
   with tf.variable_scope('conv5') as scope:
@@ -136,7 +147,7 @@ def net_1(_X, _dropout):
   with tf.variable_scope('conv6') as scope:
     conv6 = conv2d('conv6', conv5, weight_variable('weights', shape=[3,3,256,312], wd=0.004)                                
                                 , bias_variable('biases', [312], 0.0),1, is_training, padding = 'VALID')
-    pool6 = max_pool('pool6', conv6, k=2)
+    pool6 = max_avg_pool('pool6', conv6, k=2)
 
   with tf.variable_scope('conv7') as scope:
     conv7 = conv2d('conv7', pool6, weight_variable('weights', shape=[3,3,312,360], wd=0.004)                                
