@@ -66,6 +66,7 @@ Accuracy
 |extra + 7 conv + 2 fc + increase number of params + bacth normalization | 94.5% | </br>
 |extra + 7 conv + 2 fc + increase number of params + bacth normalization + clear some comments(???) | 95.1% | </br>
 |extra + 7 conv + 2 fc + increase number of params + bacth normalization + max-avg pooling | 95.2% | </br>
+|Update Nvidia driver from 375 -> 381 | 95.6% | </br>(WTF???)
 
 
 
